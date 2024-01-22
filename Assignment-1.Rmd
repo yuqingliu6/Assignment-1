@@ -109,6 +109,9 @@ logistic_model <- glm(Classification_numeric ~ Glucose + HOMA + Leptin + BMI + A
 summary(logistic_model)
 ```
 
+
+A 1-unit change in HOMA-IR is associated with the beta estimate of 0.2739 and 95% confidence interval of (-0.0632, 0.6110).
+
 #### 5. Construct a linear regression model using insulin as the outcome and BMI (continuous), age, and glucose as the independent variables.
 
 ```{r}
@@ -119,3 +122,4 @@ linear_model <- lm(Insulin ~ BMI + Age + Glucose, data = data)
 summary(linear_model)
 ```
 
+A 1-unit change in age is associated with the beta estimate of -0.0540 and 95% confidence interval (-0.1558, 0.0478).
