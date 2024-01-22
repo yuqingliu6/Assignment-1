@@ -9,7 +9,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Yuqing Liu" />
 
 <meta name="date" content="2024-01-22" />
 
@@ -351,18 +350,175 @@ display: none;
 
 
 <h1 class="title toc-ignore">Assignment-1</h1>
-<h4 class="author">Yuqing Liu</h4>
 <h4 class="date">2024-01-22</h4>
 
 </div>
 
 
+<pre class="r"><code>library(tidyverse)
+library(knitr)</code></pre>
+<div id="import-dataset" class="section level4">
+<h4>Import Dataset</h4>
+<pre class="r"><code>setwd(&quot;/Users/apple/Desktop/8451 Machine Learning for Epi/Assignment-1&quot;)
+data &lt;- read_csv(&quot;./bcdata_Assignment1.csv&quot;)</code></pre>
+</div>
 <div id="construct-a-table-providing-summaries-of-the-quantitative-features-of-the-dataset." class="section level4">
 <h4>1. Construct a table providing summaries of the quantitative
 features of the dataset.</h4>
+<pre class="r"><code># Calculate summaries
+summary_table &lt;- data.frame(
+  Mean = sapply(data, mean),
+  Median = sapply(data, median),
+  Minimum = sapply(data, min),
+  Maximum = sapply(data, max)
+)
+
+# Print the summary table
+kable(summary_table)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Mean</th>
+<th align="right">Median</th>
+<th align="right">Minimum</th>
+<th align="right">Maximum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Age</td>
+<td align="right">57.301724</td>
+<td align="right">56.000000</td>
+<td align="right">24.0000000</td>
+<td align="right">89.00000</td>
+</tr>
+<tr class="even">
+<td align="left">BMI</td>
+<td align="right">27.582111</td>
+<td align="right">27.662416</td>
+<td align="right">18.3700000</td>
+<td align="right">38.57876</td>
+</tr>
+<tr class="odd">
+<td align="left">Glucose</td>
+<td align="right">97.793103</td>
+<td align="right">92.000000</td>
+<td align="right">60.0000000</td>
+<td align="right">201.00000</td>
+</tr>
+<tr class="even">
+<td align="left">Insulin</td>
+<td align="right">10.012086</td>
+<td align="right">5.924500</td>
+<td align="right">2.4320000</td>
+<td align="right">58.46000</td>
+</tr>
+<tr class="odd">
+<td align="left">HOMA</td>
+<td align="right">2.694988</td>
+<td align="right">1.380939</td>
+<td align="right">0.4674087</td>
+<td align="right">25.05034</td>
+</tr>
+<tr class="even">
+<td align="left">Leptin</td>
+<td align="right">26.615080</td>
+<td align="right">20.271000</td>
+<td align="right">4.3110000</td>
+<td align="right">90.28000</td>
+</tr>
+<tr class="odd">
+<td align="left">Adiponectin</td>
+<td align="right">10.180874</td>
+<td align="right">8.352692</td>
+<td align="right">1.6560200</td>
+<td align="right">38.04000</td>
+</tr>
+<tr class="even">
+<td align="left">Resistin</td>
+<td align="right">14.725966</td>
+<td align="right">10.827740</td>
+<td align="right">3.2100000</td>
+<td align="right">82.10000</td>
+</tr>
+<tr class="odd">
+<td align="left">MCP.1</td>
+<td align="right">534.647000</td>
+<td align="right">471.322500</td>
+<td align="right">45.8430000</td>
+<td align="right">1698.44000</td>
+</tr>
+<tr class="even">
+<td align="left">Classification</td>
+<td align="right">1.551724</td>
+<td align="right">2.000000</td>
+<td align="right">1.0000000</td>
+<td align="right">2.00000</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="recode-bmi-into-the-who-defined-categories-below" class="section level4">
-<h4>2. Recode BMI into the WHO-defined categories below</h4>
+<div id="recode-bmi-into-the-who-defined-categories" class="section level4">
+<h4>2. Recode BMI into the WHO-defined categories</h4>
+<pre class="r"><code># Recode BMI into WHO-defined categories
+data$BMI_category &lt;- cut(
+  data$BMI,
+  breaks = c(-Inf, 16.5, 18.5, 25, 30, 35, 40, Inf),
+  labels = c(
+    &quot;Severely underweight&quot;,
+    &quot;Underweight&quot;,
+    &quot;Normal weight&quot;,
+    &quot;Overweight&quot;,
+    &quot;Obesity class I&quot;,
+    &quot;Obesity class II&quot;,
+    &quot;Obesity class III&quot;
+  ),
+  include.lowest = TRUE
+)
+
+# Check the frequency results of recoded variable
+table_result &lt;- table(data$BMI_category)
+dimnames(table_result) &lt;- list(&quot;BMI category&quot; = names(table_result))
+kable(table_result)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">BMI.category</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Severely underweight</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Underweight</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Normal weight</td>
+<td align="right">39</td>
+</tr>
+<tr class="even">
+<td align="left">Overweight</td>
+<td align="right">37</td>
+</tr>
+<tr class="odd">
+<td align="left">Obesity class I</td>
+<td align="right">27</td>
+</tr>
+<tr class="even">
+<td align="left">Obesity class II</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">Obesity class III</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="create-a-bar-chart-showing-the-proportion-of-breast-cancer-cases-and-controls-within-each-bmi-category.-that-is-the-graph-should-clearly-show-what-of-each-bmi-category-are-cases-and-what-are-controls" class="section level4">
 <h4>3. Create a bar chart showing the proportion of breast cancer cases

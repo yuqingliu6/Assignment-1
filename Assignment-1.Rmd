@@ -1,19 +1,67 @@
 ---
 title: "Assignment-1"
-author: "Yuqing Liu"
 date: "2024-01-22"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+```
+
+```{r message=FALSE}
+library(tidyverse)
+library(knitr)
+```   
+#### Import Dataset
+
+```{r}
+setwd("/Users/apple/Desktop/8451 Machine Learning for Epi/Assignment-1")
+data <- read_csv("./bcdata_Assignment1.csv")
 ```
 
 #### 1. Construct a table providing summaries of the quantitative features of the dataset.
 
+```{r}
+# Calculate summaries
+summary_table <- data.frame(
+  Mean = sapply(data, mean),
+  Median = sapply(data, median),
+  Minimum = sapply(data, min),
+  Maximum = sapply(data, max)
+)
 
-#### 2. Recode BMI into the WHO-defined categories below
+# Print the summary table
+kable(summary_table)
+```
 
+
+
+
+
+#### 2. Recode BMI into the WHO-defined categories 
+
+```{r}
+# Recode BMI into WHO-defined categories
+data$BMI_category <- cut(
+  data$BMI,
+  breaks = c(-Inf, 16.5, 18.5, 25, 30, 35, 40, Inf),
+  labels = c(
+    "Severely underweight",
+    "Underweight",
+    "Normal weight",
+    "Overweight",
+    "Obesity class I",
+    "Obesity class II",
+    "Obesity class III"
+  ),
+  include.lowest = TRUE
+)
+
+# Check the frequency results of recoded variable
+table_result <- table(data$BMI_category)
+dimnames(table_result) <- list("BMI category" = names(table_result))
+kable(table_result)
+```
 
 #### 3. Create a bar chart showing the proportion of breast cancer cases and controls within each BMI category. ( That is, the graph should clearly show, what % of each BMI category are cases and what % are controls)
 
