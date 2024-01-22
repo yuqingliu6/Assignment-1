@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 ```{r message=FALSE}
 library(tidyverse)
 library(knitr)
+library(ggplot2)
 ```   
 #### Import Dataset
 
