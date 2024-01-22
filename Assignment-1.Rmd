@@ -1,0 +1,25 @@
+---
+title: "Assignment-1"
+author: "Yuqing Liu"
+date: "2024-01-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#### 1. Construct a table providing summaries of the quantitative features of the dataset.
+
+
+#### 2. Recode BMI into the WHO-defined categories below
+
+
+#### 3. Create a bar chart showing the proportion of breast cancer cases and controls within each BMI category. ( That is, the graph should clearly show, what % of each BMI category are cases and what % are controls)
+
+
+#### 4. Construct a logistic regression model using breast cancer classification as the outcome and glucose, HOMA-IR, leptin, BMI (continuous) and age as the independent variables.
+
+
+#### 5. Construct a linear regression model using insulin as the outcome and BMI (continuous), age, and glucose as the independent variables.
+
