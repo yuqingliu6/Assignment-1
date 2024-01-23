@@ -20,7 +20,9 @@ setwd("/Users/apple/Desktop/8451 Machine Learning for Epi/Assignment-1")
 data <- read_csv("./bcdata_Assignment1.csv")
 ```
 
-#### 1. Construct a table providing summaries of the quantitative features of the dataset.
+#### 1. Construct a summary table 
+
+Construct a table providing summaries of the quantitative features of the dataset including mean, median, minimum value, and maximum value.
 
 ```{r}
 # Calculate summaries
@@ -41,11 +43,27 @@ kable(summary_table)
 
 #### 2. Recode BMI into the WHO-defined categories 
 
+Recode BMI into the WHO-defined categories below:
+
+* Severely underweight - BMI less than 16.5kg/m^2 
+
+* Underweight - BMI under 18.5 kg/m^2 
+
+* Normal weight - BMI greater than or equal to 18.5 to 24.9 kg/m^2
+
+* Overweight – BMI greater than or equal to 25 to 29.9 kg/m^2 
+
+* Obesity class I – BMI 30 to 34.9 kg/m^2 
+
+* Obesity class II – BMI 35 to 39.9 kg/m^2 
+
+* Obesity class III – BMI greater than or equal to 40 kg/m^2 
+
 ```{r}
 # Recode BMI into WHO-defined categories
 data$BMI_category <- cut(
   data$BMI,
-  breaks = c(-Inf, 16.5, 18.5, 25, 30, 35, 40, Inf),
+  breaks = c(0, 16.5, 18.5, 25, 30, 35, 40, Inf),
   labels = c(
     "Severely underweight",
     "Underweight",
@@ -64,7 +82,9 @@ dimnames(table_result) <- list("BMI category" = names(table_result))
 kable(table_result)
 ```
 
-#### 3. Create a bar chart showing the proportion of breast cancer cases and controls within each BMI category. (That is, the graph should clearly show, what % of each BMI category are cases and what % are controls)
+#### 3. Create a bar chart 
+
+Create a bar chart showing the proportion of breast cancer cases and controls within each BMI category. (That is, the graph should clearly show, what % of each BMI category are cases and what % are controls).
 
 ```{r}
 # Create a data frame with the proportions
@@ -94,7 +114,23 @@ ggplot(proportions_data, aes(x = BMI_category, y = Proportion, fill = Classifica
   theme_minimal()
 ```
 
-#### 4. Construct a logistic regression model using breast cancer classification as the outcome and glucose, HOMA-IR, leptin, BMI (continuous) and age as the independent variables.
+**Bar chart results:**
+
+* Within the underweight category, 100% are controls.
+
+* Within the normal weight category, 56.4% are cases and 43.6% are controls.
+
+* Within the overweight category, 62.2% are cases and 37.8% are controls.
+
+* Within the obesity class I category, 44.4% are cases and 55.6% are controls.
+
+* Within the obesity class II category, 75.0% are cases and 25.0% are controls.
+
+<br>
+
+#### 4. Construct a logistic regression model 
+
+Construct a logistic regression model using breast cancer classification as the outcome and glucose, HOMA-IR, leptin, BMI (continuous) and age as the independent variables.
 
 ```{r}
 # Recode 'Classification' to numeric values (0 and 1)
@@ -107,12 +143,19 @@ logistic_model <- glm(Classification_numeric ~ Glucose + HOMA + Leptin + BMI + A
 
 # Summarize the model
 summary(logistic_model)
+cbind(estimate = coef(logistic_model), confint(logistic_model)) |> knitr::kable(digits = 4)
 ```
 
 
-A 1-unit change in HOMA-IR is associated with the beta estimate of 0.2739 and 95% confidence interval of (-0.0632, 0.6110).
+**Logistic regression result:**
 
-#### 5. Construct a linear regression model using insulin as the outcome and BMI (continuous), age, and glucose as the independent variables.
+A 1-unit change in HOMA-IR is associated with the beta estimate of 0.2739 and a 95% confidence interval of (-0.0256, 0.65320).
+
+<br>
+
+#### 5. Construct a linear regression model 
+
+Construct a linear regression model using insulin as the outcome and BMI (continuous), age, and glucose as the independent variables.
 
 ```{r}
 # Construct linear regression model
@@ -120,6 +163,11 @@ linear_model <- lm(Insulin ~ BMI + Age + Glucose, data = data)
 
 # Summarize the model
 summary(linear_model)
+
+# Check beta coefficient and 95% CI
+cbind(estimate = coef(linear_model), confint(linear_model)) |> knitr::kable(digits = 4)
 ```
 
-A 1-unit change in age is associated with the beta estimate of -0.0540 and 95% confidence interval (-0.1558, 0.0478).
+**Linear regression result:**
+
+A 1-unit change in age is associated with the beta estimate of -0.0540 and a 95% confidence interval of (-0.1569, 0.0489).
